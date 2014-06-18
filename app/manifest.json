@@ -1,0 +1,30 @@
+{
+    "name": "news filter",
+    "version": "0.1.2",
+
+    "icons": {
+        "128": "image/icon48.png",
+        "48": "image/icon48.png",
+        "32": "image/icon32.png"
+    },
+
+    "browser_action": {
+        "default_icon": "image/icon19.png",
+        "default_title": "news filter",
+        "default_popup": "popup.html"
+    },
+
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+      },
+
+    "manifest_version": 2,
+    "description": "はてなブックマーク、My Yahoo、Amazon、feedlyで広告や不愉快な記事等を非表示にします。",
+    "content_scripts": [{
+        "js": ["jquery-1.8.3.min.js", "jquery-ui-1.8.16.custom.min.js", "config.js", "main.js"],
+        "css": ["css/jquery-ui-1.8.16.custom.css"],
+        "matches": ["http://my.yahoo.co.jp/*", "http://www.amazon.co.jp/*", "http://b.hatena.ne.jp/*", "http://feedly.com/*"],
+        "run_at": "document_end"
+    }]
+}

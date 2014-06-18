@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>news filter</title>
+        <style>
+            body {
+                width: 480px;
+                background: #fff;
+                background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#fafafa)); 
+            }
+            h3 {
+                background: #fefefe;
+                background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ddd)); 
+                text-align: center;
+                margin: 2px;
+            }
+            h4 {
+                background: #fefefe;
+                background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee)); 
+                margin: 2px;
+            }
+            .copyright {
+                text-align: center;
+                font-size: small;
+                background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee)); 
+            }
+            .ver {
+                font-size: small;
+                text-align: right;
+            }
+            #msg {
+                display: none;
+            }
+        </style>
+        <script type="text/javascript" src="./jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="./config.js"></script>
+        <script type="text/javascript" src="./popup.js"></script>
+    </head>
+    <body>
+        <h3>news filter</h3>
+        <h4>概要</h4>
+        <p>
+            はてなブックマーク、My Yahoo、Amazon、feedlyで配信された広告記事等を非表示にします。<br>
+        </p>
+        <div>
+            <h4>設定</h4>
+            <p>
+                <label for="keywords">ブロックするキーワードを1行毎に入力してください。(部分一致)</label><br>
+                <textarea id="keywords" rows="10" cols="30" placeholder="ブロックするキーワード"></textarea>
+            </p>
+            <p>
+                <label for="urls">ブロックするURLを1行毎に入力してください。(部分一致)</label><br>
+                <textarea id="urls" rows="10" cols="30" placeholder="ブロックするURL"></textarea>
+            </p>
+
+        </div>
+        <p id="msg"/>
+        <p class="ver">
+            version 0.1.2
+        </p>
+        <div class="copyright" >
+            <a href="http://www.orangesoft.co.jp" target="_blank">(C) Orangesoft Inc.</a>
+        </div>
+
+
+    </body>
+</html>
