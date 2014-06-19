@@ -5,134 +5,80 @@ $(function(){
 
     // 表示をブロックしたいキーワード
     var blockKeywords = [
-        "幸福の科学",
-        "大川隆法",
-        '麗人uno',
-       'アズ文庫',
-       '産経',
-      'ポストセブン',
-       "池田信夫",
     ];
     var blocktitlelist = [
         "Pr:",
         "Ad:",
-       "池田信夫",
-       '産経',
     ];
     // 表示をブロックしたいURL
     var blockUrlList = [
         "sankei",
     ];
     
+    var counter = 0;
 
     $('body').bind('DOMSubtreeModified', function() {
+        updateTitle(0);
+        counter = 0;
         var url = location.href;
         if(url.indexOf('amazon') != -1){
-            amazon();
+            searchAndHideKeywordItems(items.amazon);
         }else if(url.indexOf('yahoo') != -1){
-            yahoo();
+            searchAndHideKeywordItems(items.yahoo);
         }else if(url.indexOf('feedly') != -1){
-            feedly();
+            searchAndHideKeywordItems(items.feedly);
         }else if(url.indexOf('hatena') != -1){
-            hatena();
+            searchAndHideKeywordItems(items.hatena);
+        }
+        if(counter > 0){
+            updateTitle(counter);
         }
     });
 
+    var items = {
+        amazon : [
+            {target: 'span.lrg,span.med.reg', hide: 'div.rsltGrid'},
+            {target: 'div.zg_title a', hide: 'div.zg_itemRow'},
+        ],
+        feedly : [
+            {target: 'a.title', hide: 'div.u5Entry'},
+        ],
+        hatena : [
+            {target: 'a.domain span', hide: 'li.entry-unit'},
+        ],
+        yahoo : [
+            {target: '.js-link>a', hide: 'div.itemBox'},
+        ],
+    };
 
-    function amazon() {
-
-        $('span.lrg,span.med.reg').each(function() {
-            var val = $(this).text();
-            var span = $(this);
-            //console.log('>>'+val);
-            $.each(blockKeywords, function(index, blockitem) {
-                if(blockitem.length > 0 && val.indexOf(blockitem) !== -1){
-                    //console.log(val+' hide');
-                    span.closest('div.rsltGrid').hide();
-                }
-            });
-        });
-    }
-    
-    function feedly() {
-
-        $('a.title').each(function() {
-            test($(this));
-        });
-
-        function test(atag) {
-            var title = atag.text().trim();
-            //console.log('>'+title);
-            $.each(blocktitlelist, function(index, blockitem) {
-               // console.log(title+','+blockitem+','+title.indexOf(blockitem));
-                if(blockitem.length > 0 && title.indexOf(blockitem) === 0){
-                    //console.log('>>'+title);
-                    atag.parent().parent().hide();
-                }
-            });
-        }
+    function updateTitle(count) {
+        chrome.extension.sendMessage({cmd: "update_title", counter: count}, function(response) {});
     }
 
-    function hatena() {
-
-        $('a.domain span').each(function() {
-            var span = $(this);
-            var title = span.text();
-            //console.log('>'+title);
-            $.each(blockUrlList, function(index, blockitem) {
-               // console.log(title+','+blockitem+','+title.indexOf(blockitem));
-                if(blockitem.length > 0 && title.indexOf(blockitem) === 0){
-                    //console.log('>>'+title);
-                    span.closest('li.entry-unit').hide();
-                }
-            });
-        });
-
-        $('a.entry-link').each(function() {
-            var title = $(this).text();
-            var atag = $(this);
-            $.each(blockKeywords, function(index, blockitem) {
-                if(blockitem.length > 0 && title.indexOf(blockitem) !== -1){
-                    atag.closest('li.entry-unit').hide();
-                    console.log(title+' hide');
-                }
-            });
-        });
-
-    }
-
-    function yahoo() {
-
-        $('.itemBox a.js-clip').each(function() {
-            var title = $(this).attr('data-title');
-            var atag = $(this);
-            $.each(blockKeywords, function(index, blockitem) {
-                if(blockitem.length > 0 && title.indexOf(blockitem) !== -1){
-                    atag.parent().hide();
-                    //console.log(title+' hide');
-                }
+    function searchAndHideKeywordItems(pairs) {
+        $.each(pairs, function(i, pair){
+            $(pair.target).each(function() {
+                var val = $(this).text();
+                var item = $(this);
+                //console.log('>>'+val);
+                $.each(blockKeywords, function(index, blockitem) {
+                    if(blockitem.length > 0 && val.indexOf(blockitem) !== -1){
+                        //console.log(val+' hide');
+                        item.closest(pair.hide).hide();
+                        counter++;
+                    }
+                });
             });
         });
     }
 
     function init() {
         var getOptions = function() {
-//            console.log('a');
-            chrome.extension.sendMessage({cmd: "get_options"}, function(response) {
+            chrome.extension.sendMessage({cmd: "get_options", counter: counter}, function(response) {
                 var options = response.options;
                 blockKeywords = options.keywords;
                 blocktitlelist = options.keywords;
                 blockUrlList = options.urls;
-                // if(blockKeywords.length > 0){
-                //     $.each(blockKeywords, function(i, val){
-                //         console.log(val);
-                //     })
-                // }
-                // if(blockUrlList.length > 0){
-                //     $.each(blockUrlList, function(i, val){
-                //         console.log(val);
-                //     })
-                // }
             });
         };
 

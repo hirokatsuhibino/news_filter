@@ -1,6 +1,6 @@
 {
     "name": "news filter",
-    "version": "0.1.2",
+    "version": "0.1.4",
 
     "icons": {
         "128": "image/icon48.png",
@@ -17,7 +17,7 @@
     "background": {
         "scripts": ["background.js"],
         "persistent": false
-      },
+    },
 
     "manifest_version": 2,
     "description": "はてなブックマーク、My Yahoo、Amazon、feedlyで広告や不愉快な記事等を非表示にします。",
